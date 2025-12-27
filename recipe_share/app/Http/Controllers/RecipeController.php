@@ -32,9 +32,8 @@ class RecipeController extends Controller
         return view('view', compact('recipe')); 
     }
 
-    // -------------------------------
-    // USER METHODS
-    // -------------------------------
+   
+    
     public function savedRecipes() {
         $user = Auth::user();
         if (!$user) return redirect()->route('login');
