@@ -2,157 +2,288 @@
 @section('title', $recipe->title)
 
 @section('content')
-<div class="flex justify-center py-12 px-4">
-    <div class="bg-white rounded-xl shadow-md w-full max-w-3xl p-6">
 
-        @if($recipe->image)
-            <img src="{{ asset('storage/' . $recipe->image) }}" alt="{{ $recipe->title }}" class="w-full h-56 sm:h-64 object-cover rounded-lg mb-5">
-        @endif
+<style>
+/* DISABLE PAGE SCROLL */
+body {
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+}
 
-        <h1 class="text-2xl font-bold text-orange-500 mb-3">{{ $recipe->title }}</h1>
+/* NAVBAR - Fixed */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #f97316;
+    color: white;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    z-index: 1000;
+    height: 60px;
+    display: flex;
+    align-items: center;
+}
 
-        <div class="text-gray-600 text-sm flex flex-wrap gap-4 mb-5">
-            <span><i class="fa fa-tag"></i> {{ $recipe->category }}</span>
-            <span><i class="fa fa-user"></i> {{ $recipe->user->name ?? 'User' }}</span>
-            <span><i class="fa fa-calendar"></i> {{ $recipe->created_at->format('M d, Y') }}</span>
+.navbar-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.brand {
+    font-size: 20px;
+    font-weight: 800;
+    text-decoration: none;
+    color: white !important;
+    text-transform: uppercase;
+}
+
+.nav-links {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.nav-link, .logout-btn {
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+/* CENTERED PAGE WRAPPER */
+.page-center {
+    position: fixed;
+    inset: 0;
+    background-color: #f3f4f6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 60px;
+}
+
+/* MAIN CARD */
+.recipe-detail-card {
+    width: 90%;
+    max-width: 800px;
+    background-color: white;
+    border-radius: 0;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    border: 1px solid #e5e7eb;
+    display: flex;
+    flex-direction: column;
+    max-height: 85vh;
+    overflow: hidden;
+}
+
+/* SCROLLABLE CONTENT AREA - Gray Scrollbar */
+.detail-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 30px;
+}
+
+.detail-content::-webkit-scrollbar { width: 6px; }
+.detail-content::-webkit-scrollbar-track { background: #f1f1f1; }
+.detail-content::-webkit-scrollbar-thumb { background: #d1d5db; } /* Simple Gray Scroll */
+
+/* IMAGE */
+.recipe-hero-img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-bottom: 4px solid #f97316;
+    margin-bottom: 20px;
+}
+
+.recipe-title {
+    font-size: 28px;
+    font-weight: 800;
+    color: #111827;
+    text-transform: uppercase;
+    margin: 0 0 10px 0;
+}
+
+/* ACTION BAR (Like & Save) */
+.action-bar {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 25px;
+    align-items: center;
+}
+
+.btn-sharp {
+    padding: 10px 20px;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 0;
+    cursor: pointer;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-orange { background: #f97316; color: white; }
+.btn-dark { background: #374151; color: white; }
+.btn-outline { background: white; color: #374151; border: 1px solid #d1d5db; }
+.btn-red { background: #ef4444; color: white; }
+
+/* SECTIONS */
+.section-label {
+    font-size: 12px;
+    font-weight: 800;
+    color: #f97316;
+    text-transform: uppercase;
+    margin: 20px 0 10px 0;
+    display: block;
+}
+.content-box {
+    font-size: 14px;
+    color: #374151;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    background: #f9fafb;
+    padding: 15px;
+    border: 1px solid #f3f4f6;
+}
+
+/* MODAL */
+#likesModal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+.modal-content {
+    background: white;
+    width: 100%;
+    max-width: 350px;
+    padding: 25px;
+}
+</style>
+
+<nav class="navbar">
+    <div class="navbar-container">
+        <a href="{{ route('welcome') }}" class="brand">RecipeShare</a>
+        <div class="nav-links">
+            <a href="{{ route('recipes.index') }}" class="nav-link">Recipes</a>
+            <a href="{{ route('dashboard') }}" class="nav-link">Dashboard</a>
+            <form action="{{ route('logout') }}" method="POST" style="margin:0;">
+                @csrf
+                <button type="submit" class="logout-btn">Logout</button>
+            </form>
         </div>
+    </div>
+</nav>
 
-        <h3 class="font-semibold text-gray-700 mb-1">Ingredients</h3>
-        <p class="bg-gray-50 p-4 rounded mb-5 whitespace-pre-wrap text-gray-800 leading-relaxed">{{ $recipe->ingredients }}</p>
+<div class="page-center">
+    <div class="recipe-detail-card">
+        <div class="detail-content">
+            
+            @if($recipe->image)
+                <img src="{{ asset('storage/' . $recipe->image) }}" class="recipe-hero-img">
+            @endif
 
-        <h3 class="font-semibold text-gray-700 mb-1">Directions</h3>
-        <p class="bg-gray-50 p-4 rounded mb-5 whitespace-pre-wrap text-gray-800 leading-relaxed">{{ $recipe->steps }}</p>
+            <h1 class="recipe-title">{{ $recipe->title }}</h1>
+            
+            <div style="font-size: 11px; color: #6b7280; font-weight: 700; text-transform: uppercase; margin-bottom: 20px;">
+                {{ $recipe->category }} | BY: {{ $recipe->user->name ?? 'USER' }} | {{ $recipe->created_at->format('d M, Y') }}
+            </div>
 
-        <div class="flex flex-wrap items-start gap-4 mb-8">
-
-            <div class="flex flex-col items-center">
-                <form action="{{ route('recipes.like', $recipe->id) }}" method="POST">
+            <div class="action-bar">
+                <form action="{{ route('recipes.like', $recipe->id) }}" method="POST" style="margin:0;">
                     @csrf
-                    <button class="px-5 py-2.5 bg-orange-500 text-white rounded-lg font-bold hover:bg-orange-600 transition flex items-center gap-2 shadow-sm">
-                        <i class="fa fa-thumbs-up"></i> Like
-                    </button>
+                    <button type="submit" class="btn-sharp btn-orange">LIKE</button>
                 </form>
-                <span class="text-gray-500 text-xs mt-1.5 cursor-pointer hover:text-orange-500 transition" onclick="openLikesModal()">
-                    {{ $recipe->likes->count() }} {{ $recipe->likes->count() == 1 ? 'like' : 'likes' }}
+
+                @auth
+                    <form action="{{ route('recipes.save', $recipe->id) }}" method="POST" style="margin:0;">
+                        @csrf
+                        <button type="submit" class="btn-sharp btn-dark">
+                            {{ auth()->user()->savedRecipes()->where('recipe_id', $recipe->id)->exists() ? 'UNSAVE' : 'SAVE' }}
+                        </button>
+                    </form>
+                @endauth
+
+                <span style="font-size: 11px; font-weight: 800; cursor: pointer; color: #f97316; text-decoration: underline;" onclick="openLikesModal()">
+                    {{ $recipe->likes->count() }} LIKES
                 </span>
             </div>
 
-            @auth('web')
-            <div class="flex flex-col">
-                <form action="{{ route('recipes.save', $recipe->id) }}" method="POST">
-                    @csrf
-                    <button class="px-5 py-2.5 bg-slate-700 text-white rounded-lg font-bold hover:bg-slate-800 transition flex items-center gap-2 shadow-sm">
-                        <i class="fa {{ auth()->user()->savedRecipes()->where('recipe_id', $recipe->id)->exists() ? 'fa-bookmark' : 'fa-bookmark-o' }}"></i> Save
-                    </button>
-                </form>
-            </div>
-
-            @if(auth()->id() === $recipe->user_id)
-                <div class="flex gap-2">
-                    <a href="{{ route('recipes.edit', $recipe->id) }}" class="px-5 py-2.5 bg-gray-100 text-gray-700 rounded-lg font-bold hover:bg-gray-200 transition border border-gray-200">
-                        Edit
-                    </a>
-                    <form action="{{ route('recipes.destroy', $recipe->id) }}" method="POST" onsubmit="return confirm('Delete this recipe?')">
-                        @csrf @method('DELETE')
-                        <button class="px-5 py-2.5 bg-red-50 text-red-600 rounded-lg font-bold hover:bg-red-600 hover:text-white transition border border-red-200">
-                            Delete
-                        </button>
-                    </form>
-                </div>
-            @endif
-            @endauth
-        </div>
-
-        <div id="likesModal" class="fixed inset-0 bg-black/60 hidden justify-center items-center z-50 backdrop-blur-sm">
-            <div class="bg-white p-6 rounded-xl max-w-sm w-full shadow-2xl relative mx-4">
-                <span class="absolute top-3 right-4 text-gray-400 hover:text-gray-600 cursor-pointer text-2xl" onclick="closeLikesModal()">&times;</span>
-                <h3 class="font-bold text-lg mb-4 border-b pb-2">Liked by</h3>
-                <ul class="space-y-3 max-h-64 overflow-y-auto pr-2 custom-scrollbar">
-                    @forelse($recipe->likes as $like)
-                        @if($like->user)
-                            <li class="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg transition">
-                                <div class="w-8 h-8 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center">
-                                    <i class="fa fa-user"></i>
-                                </div>
-                                <span class="font-medium text-gray-700">{{ $like->user->name }}</span>
-                            </li>
-                        @endif
-                    @empty
-                        <li class="text-gray-400 text-center py-4">No likes yet</li>
-                    @endforelse
-                </ul>
-            </div>
-        </div>
-
-        <hr class="my-8 border-gray-100">
-
-        <h4 class="text-lg font-bold mb-5 flex items-center gap-2">
-            <i class="fa fa-comments text-gray-400"></i>
-            Comments ({{ $recipe->comments->count() }})
-        </h4>
-
-        <div class="space-y-4 mb-8">
-            @foreach($recipe->comments as $comment)
-                <div class="bg-gray-50 p-4 rounded-xl border border-gray-100 shadow-sm transition hover:border-orange-200">
-                    <div class="flex justify-between items-start mb-2">
-                        <strong class="text-orange-600 font-semibold">{{ $comment->user->name ?? 'Deleted User' }}</strong>
-                        <small class="text-gray-400">{{ $comment->created_at->diffForHumans() }}</small>
+            @auth
+                @if(auth()->id() === $recipe->user_id)
+                    <div class="action-bar" style="border-top: 1px solid #f3f4f6; padding-top: 15px;">
+                        <a href="{{ route('recipes.edit', $recipe->id) }}" class="btn-sharp btn-outline">EDIT RECIPE</a>
+                        <form action="{{ route('recipes.destroy', $recipe->id) }}" method="POST" onsubmit="return confirm('DELETE THIS RECIPE?')">
+                            @csrf @method('DELETE')
+                            <button type="submit" class="btn-sharp btn-red">DELETE</button>
+                        </form>
                     </div>
-                    <p class="text-gray-700 leading-relaxed">{{ $comment->body }}</p>
+                @endif
+            @endauth
+
+            <span class="section-label">Ingredients</span>
+            <div class="content-box">{{ $recipe->ingredients }}</div>
+
+            <span class="section-label">Directions</span>
+            <div class="content-box">{{ $recipe->steps }}</div>
+
+            <span class="section-label" style="margin-top: 40px;">Comments ({{ $recipe->comments->count() }})</span>
+            @foreach($recipe->comments as $comment)
+                <div style="background: #f9fafb; padding: 12px; margin-bottom: 10px; border-left: 3px solid #f97316;">
+                    <div style="display:flex; justify-content:space-between; margin-bottom: 5px;">
+                        <strong style="font-size: 12px;">{{ $comment->user->name }}</strong>
+                        <small style="font-size: 10px; color: #9ca3af;">{{ $comment->created_at->diffForHumans() }}</small>
+                    </div>
+                    <p style="font-size: 13px; margin: 0;">{{ $comment->body }}</p>
                 </div>
             @endforeach
+
+            @auth
+            <form action="{{ route('recipes.comment', $recipe->id) }}" method="POST" style="background: #fff7ed; padding: 15px; margin-top: 20px;">
+                @csrf
+                <textarea name="body" rows="2" placeholder="WRITE A COMMENT..." required style="width:100%; border:1px solid #ddd; padding:10px; font-size:13px; border-radius:0; outline:none;"></textarea>
+                <button type="submit" class="btn-sharp btn-orange" style="margin-top:10px;">POST COMMENT</button>
+            </form>
+            @endauth
         </div>
+    </div>
+</div>
 
-        @auth('web')
-        <form action="{{ route('recipes.comment', $recipe->id) }}" method="POST" class="space-y-4 bg-orange-50 p-5 rounded-xl">
-            @csrf
-            <div>
-                <label class="block text-sm font-semibold text-orange-800 mb-1">Join the conversation</label>
-                <textarea name="body" rows="3" placeholder="What do you think about this recipe?" required 
-                class="w-full p-3 border border-orange-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none transition"></textarea>
-            </div>
-            <div class="flex flex-wrap gap-3">
-                <button type="submit" class="bg-orange-500 text-white px-6 py-2.5 rounded-lg font-bold hover:bg-orange-600 shadow-md transition transform active:scale-95">
-                    Post Comment
-                </button>
-                <a href="{{ route('recipes.index') }}" class="bg-white text-gray-600 border border-gray-200 px-6 py-2.5 rounded-lg font-bold hover:bg-gray-50 transition">
-                    Back to Feed
-                </a>
-            </div>
-        </form>
-        @else
-        <p class="text-center text-gray-500 bg-gray-50 p-4 rounded-lg">Please <a href="{{ route('login') }}" class="text-orange-500 font-bold underline">login</a> to leave a comment.</p>
-        @endauth
-
+<div id="likesModal" onclick="closeLikesModal()">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <h3 style="margin:0 0 15px 0; font-size: 14px; border-bottom: 2px solid #f97316; padding-bottom: 10px; text-transform: uppercase;">Liked By</h3>
+        <div style="max-height: 200px; overflow-y: auto;">
+            @forelse($recipe->likes as $like)
+                <div style="padding: 8px 0; border-bottom: 1px solid #f3f4f6; font-size: 13px; font-weight: 600;">{{ $like->user->name }}</div>
+            @empty
+                <div style="text-align: center; color: #9ca3af; padding: 15px;">No likes yet</div>
+            @endforelse
+        </div>
+        <button onclick="closeLikesModal()" class="btn-sharp btn-dark" style="width: 100%; margin-top: 20px; justify-content: center;">CLOSE</button>
     </div>
 </div>
 
 <script>
-function openLikesModal() {
-    const modal = document.getElementById('likesModal');
-    modal.classList.remove('hidden');
-    modal.classList.add('flex');
-    document.body.style.overflow = 'hidden'; // Prevent scroll
-}
-
-function closeLikesModal() {
-    const modal = document.getElementById('likesModal');
-    modal.classList.add('hidden');
-    modal.classList.remove('flex');
-    document.body.style.overflow = 'auto'; // Re-enable scroll
-}
-
-window.addEventListener('click', function(e) {
-    const modal = document.getElementById('likesModal');
-    if(e.target === modal){
-        closeLikesModal();
-    }
-});
+function openLikesModal() { document.getElementById('likesModal').style.display = 'flex'; }
+function closeLikesModal() { document.getElementById('likesModal').style.display = 'none'; }
 </script>
 
-<style>
-    .custom-scrollbar::-webkit-scrollbar { width: 5px; }
-    .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
-    .custom-scrollbar::-webkit-scrollbar-thumb { background: #ed8936; border-radius: 10px; }
-</style>
 @endsection

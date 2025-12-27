@@ -1,51 +1,54 @@
-@extends('layouts.app') {{-- Use common layout --}}
+@extends('layouts.app')
+@section('title', 'Admin Login')
 
 @section('content')
-<!-- Navbar -->
-<nav class="fixed top-0 left-0 w-full bg-orange-500 text-white shadow-md z-50">
-    <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
-        <a href="{{ route('welcome') }}" class="font-bold text-lg">RecipeShare</a>
-        <div>
-            <a href="{{ route('login') }}" class="px-3 py-1 rounded hover:bg-orange-600 transition">Login</a>
-            <a href="{{ route('register') }}" class="px-3 py-1 rounded hover:bg-orange-600 transition">Register</a>
-        </div>
+
+<style>
+/* DISABLE PAGE SCROLL */
+body { overflow: hidden; margin: 0; padding: 0; }
+
+/* NAVBAR */
+.navbar { position: fixed; top: 0; left: 0; width: 100%; background-color: #f97316; color: white; z-index: 1000; height: 60px; display: flex; align-items: center; }
+.navbar-container { max-width: 1200px; margin: 0 auto; width: 100%; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; box-sizing: border-box; }
+.brand { font-size: 20px; font-weight: 800; text-decoration: none; color: white !important; text-transform: uppercase; }
+
+/* CENTERED LOGIN BOX */
+.login-wrapper { position: fixed; inset: 0; background-color: #f3f4f6; display: flex; justify-content: center; align-items: center; padding-top: 60px; }
+.login-card { width: 100%; max-width: 380px; background-color: white; border-radius: 0; box-shadow: 0 10px 25px rgba(0,0,0,0.1); padding: 35px; border: 1px solid #e5e7eb; }
+.login-card h2 { font-size: 20px; font-weight: 700; text-align: center; color: #f97316; margin-bottom: 25px; text-transform: uppercase; }
+
+/* FORM STYLING - Simple Style */
+.form-group { margin-bottom: 18px; }
+.form-label { display: block; font-size: 13px; color: #4b5563; margin-bottom: 6px; } /* Simple Label */
+.form-input { width: 100%; border: 1px solid #d1d5db; padding: 10px; font-size: 14px; border-radius: 0; outline: none; box-sizing: border-box; }
+.form-input:focus { border-color: #f97316; }
+
+.login-btn { width: 100%; background-color: #f97316; color: white; font-weight: 600; padding: 12px; border: none; cursor: pointer; text-transform: uppercase; font-size: 13px; }
+.back-link { display: block; text-align: center; margin-top: 15px; font-size: 12px; color: #6b7280; text-decoration: none; }
+</style>
+
+<nav class="navbar">
+    <div class="navbar-container">
+        <a href="{{ route('welcome') }}" class="brand">RecipeShare</a>
     </div>
 </nav>
 
-<!-- Admin Login Card -->
-<div class="fixed inset-0 flex items-center justify-center bg-gray-100 pt-16">
-    <div class="w-full max-w-md bg-white rounded-lg shadow-lg p-8">
-
-        <h2 class="text-2xl font-bold text-center text-orange-500 mb-6">Admin Login</h2>
-
-        @if(session('error')) 
-            <div class="bg-red-100 text-red-700 p-2 rounded mb-4 text-sm">
-                {{ session('error') }}
-            </div> 
-        @endif
-
-        @if($errors->any())
-            <div class="bg-red-100 text-red-700 p-2 rounded mb-4 text-sm">
-                {{ $errors->first() }}
-            </div>
-        @endif
-
-        <form action="{{ route('admin.login.post') }}" method="POST" class="space-y-4">
+<div class="login-wrapper">
+    <div class="login-card">
+        <h2>Admin Login</h2>
+        <form action="{{ route('admin.login.post') }}" method="POST">
             @csrf
-            <div>
-                <label class="block mb-1 text-sm font-semibold">Admin Email</label>
-                <input type="email" name="email" placeholder="Admin Email" class="w-full border rounded px-3 py-2 text-sm" required>
+            <div class="form-group">
+                <label class="form-label">Email Address</label>
+                <input type="email" name="email"  class="form-input" required>
             </div>
-            <div>
-                <label class="block mb-1 text-sm font-semibold">Password</label>
-                <input type="password" name="password" placeholder="Password" class="w-full border rounded px-3 py-2 text-sm" required>
+            <div class="form-group">
+                <label class="form-label">Password</label>
+                <input type="password" name="password"  class="form-input" required>
             </div>
-            <button type="submit" class="w-full bg-orange-500 text-white font-bold py-2 rounded hover:bg-orange-600 transition text-sm">Login</button>
+            <button type="submit" class="login-btn">Login to Dashboard</button>
         </form>
-
-        <p class="text-center mt-4 text-gray-600 text-sm">
-            Back to <a href="{{ route('welcome') }}" class="text-orange-500 hover:underline">Homepage</a>
-        </p>
+        <a href="{{ route('welcome') }}" class="back-link">Back to Homepage</a>
     </div>
 </div>
 @endsection

@@ -3,69 +3,216 @@
 
 @section('content')
 
-<div class="flex justify-center py-12 px-4">
-    <div class="w-full max-w-lg bg-white rounded-xl shadow-lg p-6">
+<style>
+/* DISABLE SCROLL ON BODY */
+body {
+    overflow: hidden;
+}
 
-        <h1 class="text-2xl font-bold text-center text-orange-500 mb-6">
-            Edit Recipe
-        </h1>
+/* NAVBAR - Fixed & Sharp */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #f97316;
+    color: white;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    z-index: 100;
+}
+
+.navbar-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.brand {
+    font-size: 20px;
+    font-weight: 800;
+    text-decoration: none;
+    color: #ffffff !important;
+    text-transform: uppercase;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.nav-link, .logout-btn {
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+/* CENTERED WRAPPER (No Scroll) */
+.page-center {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f3f4f6;
+    padding-top: 60px;
+}
+
+/* EDIT CARD - Sharp */
+.edit-card {
+    width: 100%;
+    max-width: 480px;
+    background-color: white;
+    border-radius: 0;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    padding: 24px 32px;
+    border: 1px solid #e5e7eb;
+    box-sizing: border-box;
+}
+
+.edit-card h1 {
+    font-size: 22px;
+    font-weight: 800;
+    text-align: center;
+    color: #f97316;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* FORM ELEMENTS */
+.edit-card label {
+    display: block;
+    font-weight: 700;
+    font-size: 11px;
+    margin-bottom: 4px;
+    color: #374151;
+    text-transform: uppercase;
+}
+
+.edit-card input[type="text"],
+.edit-card textarea {
+    width: 100%;
+    border: 1px solid #d1d5db;
+    border-radius: 0;
+    padding: 8px 10px;
+    font-size: 13px;
+    margin-bottom: 12px;
+    box-sizing: border-box;
+    outline: none;
+}
+
+.edit-card textarea {
+    resize: none;
+}
+
+/* IMAGE PREVIEW - Sharp */
+.edit-card img {
+    display: block;
+    margin-bottom: 10px;
+    width: 80px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 0;
+    border: 2px solid #f97316;
+}
+
+/* BUTTONS - Perfectly Aligned */
+.form-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.btn-form {
+    width: 100%;
+    box-sizing: border-box;
+    font-weight: 800;
+    padding: 12px 0;
+    border-radius: 0;
+    font-size: 13px;
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+    border: 2px solid #f97316;
+    cursor: pointer;
+    transition: none !important;
+}
+
+.primary-btn {
+    background-color: #f97316 !important;
+    color: white !important;
+}
+
+.secondary-btn {
+    background-color: white !important;
+    color: #f97316 !important;
+}
+</style>
+
+<nav class="navbar">
+    <div class="navbar-container">
+        <a href="{{ route('welcome') }}" class="brand">RecipeShare</a>
+        <div class="nav-links">
+            <a href="{{ route('recipes.index') }}" class="nav-link">Recipes</a>
+            <a href="{{ route('recipes.suggest') }}" class="nav-link">Suggest</a>
+            <a href="{{ route('dashboard') }}" class="nav-link">Dashboard</a>
+            <form action="{{ route('logout') }}" method="POST" style="margin:0;">
+                @csrf
+                <button type="submit" class="logout-btn">Logout</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<div class="page-center">
+    <div class="edit-card">
+        <h1>Edit Recipe</h1>
 
         @if ($errors->any())
-            <div class="bg-red-100 text-red-700 p-3 rounded mb-4 text-sm">
-                @foreach ($errors->all() as $error)
-                    <div>• {{ $error }}</div>
-                @endforeach
+            <div style="background-color: #fee2e2; color: #b91c1c; padding: 8px; margin-bottom: 12px; border-left: 4px solid #dc2626; font-size: 12px;">
+                {{ $errors->first() }}
             </div>
         @endif
 
-        <form action="{{ route('recipes.update', $recipe->id) }}" method="POST" enctype="multipart/form-data" class="space-y-4">
+        <form action="{{ route('recipes.update', $recipe->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
 
-            <div>
-                <label class="block text-sm font-semibold mb-1">Recipe Title</label>
-                <input type="text" name="title" value="{{ old('title', $recipe->title) }}" 
-                       class="w-full border rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400" required>
-            </div>
+            <label>Title</label>
+            <input type="text" name="title" value="{{ old('title', $recipe->title) }}" required>
 
-            <div>
-                <label class="block text-sm font-semibold mb-1">Ingredients</label>
-                <textarea rows="3" name="ingredients" 
-                          class="w-full border rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 resize-none"
-                          required>{{ old('ingredients', $recipe->ingredients) }}</textarea>
-            </div>
+            <label>Ingredients</label>
+            <textarea name="ingredients" rows="2" required>{{ old('ingredients', $recipe->ingredients) }}</textarea>
 
-            <div>
-                <label class="block text-sm font-semibold mb-1">Steps</label>
-                <textarea rows="3" name="steps" 
-                          class="w-full border rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 resize-none"
-                          required>{{ old('steps', $recipe->steps) }}</textarea>
-            </div>
+            <label>Steps</label>
+            <textarea name="steps" rows="2" required>{{ old('steps', $recipe->steps) }}</textarea>
 
-            <div>
-                <label class="block text-sm font-semibold mb-1">Category</label>
-                <input type="text" name="category" value="{{ old('category', $recipe->category) }}" 
-                       class="w-full border rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400" required>
-            </div>
+            <label>Category</label>
+            <input type="text" name="category" value="{{ old('category', $recipe->category) }}" required>
 
-            <div>
-                <label class="block text-sm font-semibold mb-1">Recipe Image</label>
+            <label>Current Image</label>
+            <div style="display: flex; align-items: flex-end; gap: 10px;">
                 @if($recipe->image)
-                    <img src="{{ asset('storage/'.$recipe->image) }}" class="mb-2 w-28 rounded border">
+                    <img src="{{ asset('storage/'.$recipe->image) }}">
                 @endif
-                <input type="file" name="image" class="w-full text-sm">
+                <input type="file" name="image" style="font-size: 11px; margin-bottom: 12px;">
             </div>
 
-            <button type="submit" class="w-full bg-orange-500 text-white font-bold py-2 rounded hover:bg-orange-600 transition">
-                Update Recipe
-            </button>
-
-            <a href="{{ route('recipes.index') }}" 
-               class="block w-full text-center bg-gray-200 py-2 rounded font-bold hover:bg-gray-300 transition">
-               Cancel
-            </a>
+            <div class="form-actions">
+                <button type="submit" class="btn-form primary-btn">Update Recipe</button>
+                <a href="{{ route('recipes.index') }}" class="btn-form secondary-btn">Cancel</a>
+            </div>
         </form>
-
     </div>
 </div>
 

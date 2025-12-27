@@ -1,65 +1,202 @@
 @extends('layouts.app')
+@section('title', 'Manage Users')
 
 @section('content')
-<!-- Navbar -->
-<nav class="fixed top-0 left-0 w-full bg-orange-500 text-white shadow-md z-50">
-    <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
-        <a href="{{ route('welcome') }}" class="font-bold text-lg">RecipeShare</a>
-        <div class="flex items-center gap-2">
-            <a href="{{ route('admin.dashboard') }}" class="px-3 py-1 rounded hover:bg-orange-600 transition">Dashboard</a>
-            <a href="{{ route('admin.recipes') }}" class="px-3 py-1 rounded hover:bg-orange-600 transition">Manage Recipes</a>
-            <a href="{{ route('admin.users') }}" class="px-3 py-1 rounded bg-orange-700 hover:bg-orange-600 transition">Manage Users</a>
-            <form action="{{ route('admin.logout') }}" method="POST">
+
+<style>
+/* DISABLE PAGE SCROLL */
+body {
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+}
+
+/* NAVBAR - Fixed & Sharp */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #f97316;
+    color: white;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    z-index: 1000;
+    height: 60px;
+    display: flex;
+    align-items: center;
+}
+
+.navbar-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.brand {
+    font-size: 20px;
+    font-weight: 800;
+    text-decoration: none;
+    color: white !important;
+    text-transform: uppercase;
+}
+
+.nav-links {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.nav-link, .logout-btn {
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 11px;
+    text-transform: uppercase;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+/* CENTERED PAGE WRAPPER */
+.page-center {
+    position: fixed;
+    inset: 0;
+    background-color: #f3f4f6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 60px;
+}
+
+/* MAIN CARD */
+.admin-card {
+    width: 95%;
+    max-width: 1000px;
+    background-color: white;
+    border-radius: 0;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    padding: 25px;
+    border: 1px solid #e5e7eb;
+    display: flex;
+    flex-direction: column;
+    max-height: 85vh;
+}
+
+/* TABLE AREA - Internal Scroll */
+.table-area {
+    flex: 1;
+    overflow-y: auto;
+    border: 1px solid #f3f4f6;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.admin-table th {
+    position: sticky;
+    top: 0;
+    background: #f9fafb;
+    color: #374151;
+    font-size: 11px;
+    text-transform: uppercase;
+    padding: 15px;
+    text-align: left;
+    border-bottom: 2px solid #f97316;
+    z-index: 10;
+}
+
+.admin-table td {
+    padding: 15px;
+    font-size: 13px;
+    border-bottom: 1px solid #f3f4f6;
+    color: #4b5563;
+}
+
+/* ACTION BUTTONS */
+.btn-del {
+    color: #ef4444;
+    text-transform: uppercase;
+    font-size: 11px;
+    font-weight: 600;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+/* SCROLLBAR */
+.table-area::-webkit-scrollbar { width: 6px; }
+.table-area::-webkit-scrollbar-track { background: #f1f1f1; }
+.table-area::-webkit-scrollbar-thumb { background: #d1d5db; }
+</style>
+
+<nav class="navbar">
+    <div class="navbar-container">
+        <a href="{{ route('welcome') }}" class="brand">Admin Panel</a>
+        <div class="nav-links">
+            <a href="{{ route('admin.dashboard') }}" class="nav-link">Overview</a>
+            <a href="{{ route('admin.recipes') }}" class="nav-link">Recipes</a>
+            <a href="{{ route('admin.users') }}" class="nav-link">Users</a>
+            <form action="{{ route('admin.logout') }}" method="POST" style="margin:0;">
                 @csrf
-                <button type="submit" class="px-3 py-1 rounded bg-red-500 hover:bg-red-600 transition text-white font-semibold">Logout</button>
+                <button type="submit" class="logout-btn">Logout</button>
             </form>
         </div>
     </div>
 </nav>
 
-<!-- Main Content -->
-<div class="pt-20 max-w-7xl mx-auto px-4">
+<div class="page-center">
+    <div class="admin-card">
+        
+        <h2 style="font-size: 16px; font-weight: 700; text-transform: uppercase; margin-bottom: 20px; color: #111827;">
+            All Registered Users
+        </h2>
 
-    <h1 class="text-2xl font-bold text-orange-500 mb-6 border-b-2 border-orange-500 inline-block pb-1">
-        All Registered Users
-    </h1>
+        @if(session('success'))
+            <div style="background: #f0fdf4; color: #166534; padding: 10px; font-size: 12px; margin-bottom: 15px; border: 1px solid #bbf7d0;">
+                {{ session('success') }}
+            </div>
+        @endif
 
-    @if(session('success'))
-        <div class="bg-green-100 text-green-700 p-4 rounded mb-4 text-sm">
-            {{ session('success') }}
+        <div class="table-area">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th style="width: 100px;">User ID</th>
+                        <th>Full Name</th>
+                        <th>Email Address</th>
+                        <th style="text-align:right;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($users as $user)
+                    <tr>
+                        <td style="color: #9ca3af;">#{{ $user->id }}</td>
+                        <td style="color: #111827;">{{ $user->name }}</td>
+                        <td>{{ $user->email }}</td>
+                        <td style="text-align:right;">
+                            <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Delete this user?')">
+                                @csrf @method('DELETE')
+                                <button type="submit" class="btn-del">Delete User</button>
+                            </form>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="4" style="text-align:center; padding: 40px; color: #9ca3af;">No users found.</td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
         </div>
-    @endif
 
-    <div class="bg-white rounded-lg shadow p-4 overflow-auto">
-        <table class="min-w-full border-collapse">
-            <thead class="bg-orange-50">
-                <tr>
-                    <th class="text-left text-orange-500 uppercase font-bold px-5 py-3 text-sm">User ID</th>
-                    <th class="text-left text-orange-500 uppercase font-bold px-5 py-3 text-sm">Full Name</th>
-                    <th class="text-left text-orange-500 uppercase font-bold px-5 py-3 text-sm">Email Address</th>
-                    <th class="text-left text-orange-500 uppercase font-bold px-5 py-3 text-sm">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse($users as $user)
-                <tr class="border-b">
-                    <td class="px-5 py-4 text-gray-600">#{{ $user->id }}</td>
-                    <td class="px-5 py-4">{{ $user->name }}</td>
-                    <td class="px-5 py-4">{{ $user->email }}</td>
-                    <td class="px-5 py-4 flex gap-4">
-                        <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Delete this user?')">
-                            @csrf @method('DELETE')
-                            <button type="submit" class="text-red-600 font-bold text-xs uppercase hover:underline">Delete</button>
-                        </form>
-                    </td>
-                </tr>
-                @empty
-                <tr>
-                    <td colspan="4" class="text-center text-gray-400 py-16">No users found.</td>
-                </tr>
-                @endforelse
-            </tbody>
-        </table>
     </div>
 </div>
+
 @endsection

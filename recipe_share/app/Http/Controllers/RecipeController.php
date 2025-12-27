@@ -185,15 +185,16 @@ class RecipeController extends Controller
  
 public function generate(Request $request)
 {
-
     if (!$request->ingredients || trim($request->ingredients) === '') {
         return redirect()->route('recipes.suggest')
                          ->with('error', 'You have to type ingredients first!');
     }
 
+    // User ke ingredients ko collect aur clean karna
     $userIngredients = collect(explode(',', strtolower($request->ingredients)))
         ->map(fn($i) => trim($i));
 
+    // JSON file se recipes load karna
     $recipes = json_decode(file_get_contents(storage_path('app/recipes.json')), true);
 
     $results = [];
@@ -202,26 +203,27 @@ public function generate(Request $request)
         $recipeIngredients = collect($recipe['ingredients'])
             ->map(fn($i) => strtolower(trim($i)));
 
-        $matched = $recipeIngredients->intersect($userIngredients)->count();
-        $maxMatch = min($matched, 3);
+        // Kitne ingredients match ho rahe hain
+        $matchedCount = $recipeIngredients->intersect($userIngredients)->count();
 
-        if ($maxMatch >= 1) {
+        // CONDITION: Sirf wahi recipes dikhao jahan 2 ya usse zyada (>= 2) ingredients match hon
+        if ($matchedCount >= 2) {
             $results[] = [
                 'title' => $recipe['title'],
                 'ingredients' => $recipe['ingredients'], 
                 'steps' => $recipe['steps'],
-                'match' => round(($maxMatch / $recipeIngredients->count()) * 100),
+                // Match percentage calculation
+                'match' => round(($matchedCount / $recipeIngredients->count()) * 100),
+                'matched_count' => $matchedCount // Sorting ke liye use kar sakte hain
             ];
         }
     }
 
-    // Sort results by match percentage descending
+    // Results ko match percentage ke hisaab se sort karna (Zyada match upar)
     $results = collect($results)->sortByDesc('match')->values()->all();
 
     return view('suggest', compact('results', 'userIngredients'));
 }
-
-
 
 
 }
