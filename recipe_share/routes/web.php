@@ -7,7 +7,9 @@ use App\Http\Controllers\RecipeController;
 
 
 Route::get('/', [RecipeController::class, 'welcome'])->name('welcome');
+
 Route::get('/recipes', [RecipeController::class, 'index'])->name('recipes.index');
+
 Route::get('/recipes/{id}', [RecipeController::class, 'show'])
     ->where('id', '[0-9]+')
     ->name('recipes.show');

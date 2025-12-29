@@ -214,6 +214,7 @@ body {
     </div>
 </nav>
 
+
 <div class="page-center">
     <div class="recipes-card">
         <h1>All Recipes</h1>

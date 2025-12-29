@@ -8,7 +8,6 @@ class Recipe extends Model
 {
     protected $fillable = ['title', 'ingredients', 'steps', 'category', 'image', 'user_id'];
 
-    // Relationships
     public function user() { 
         return $this->belongsTo(User::class); 
     }

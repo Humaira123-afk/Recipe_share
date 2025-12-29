@@ -3,7 +3,6 @@
 @section('content')
 
 <style>
-/* NAVBAR */
 .navbar {
     position: fixed;
     top: 0;
@@ -35,7 +34,6 @@
     background-color: rgba(255,255,255,0.2);
 }
 
-/* PAGE WRAPPER */
 .page-wrapper {
     position: fixed;
     inset: 0;
@@ -46,7 +44,6 @@
     padding-top: 64px;
 }
 
-/* CARD */
 .dashboard-card {
     width: 100%;
     max-width: 400px;
@@ -59,7 +56,6 @@
     box-shadow: 0 10px 20px rgba(0,0,0,0.15);
 }
 
-/* SUCCESS MESSAGE */
 .success-msg {
     background-color: #dcfce7;
     color: #166534;
@@ -70,7 +66,6 @@
     text-align: center;
 }
 
-/* USER AVATAR */
 .user-avatar {
     width: 80px;
     height: 80px;
@@ -85,7 +80,6 @@
     margin-bottom: 12px;
 }
 
-/* USER INFO */
 .user-name {
     font-size: 18px;
     font-weight: bold;
@@ -99,7 +93,6 @@
     margin-bottom: 20px;
 }
 
-/* BUTTONS CONTAINER */
 .button-group {
     display: flex;
     flex-direction: column;
@@ -107,7 +100,6 @@
     gap: 10px;
 }
 
-/* BASE BUTTON STYLE - FIXING ALL STATES */
 .btn {
     width: 100%;
     padding: 12px 0;
@@ -119,38 +111,33 @@
     text-decoration: none;
     border-radius: 0;
     display: block;
-    transition: none !important; /* No animations */
-    outline: none !important;    /* No focus ring */
+    transition: none !important;
+    outline: none !important;  
     box-shadow: none !important;
 }
 
-/* Primary Orange - Browse All Recipes */
 .btn-primary {
     background-color: #f97316 !important;
     color: white !important;
 }
 
-/* Fixed states for Primary */
 .btn-primary:hover, .btn-primary:active, .btn-primary:focus {
     background-color: #f97316 !important;
     color: white !important;
 }
 
-/* Secondary White - Other Buttons */
 .btn-secondary {
     background-color: white !important;
     color: #f97316 !important;
     border: 2px solid #f97316 !important;
 }
 
-/* Fixed states for Secondary */
 .btn-secondary:hover, .btn-secondary:active, .btn-secondary:focus {
     background-color: white !important;
     color: #f97316 !important;
     border: 2px solid #f97316 !important;
 }
 
-/* Logout Button */
 .btn-logout {
     background-color: white !important;
     color: #dc2626 !important;
@@ -173,16 +160,21 @@
 
 <div class="page-wrapper">
     <div class="dashboard-card">
-
-        @if(session('success'))
-            <div class="success-msg">{{ session('success') }}</div>
+        @if (session('success'))
+            <div class="success-msg">
+                {{ session('success') }}
+            </div>  
         @endif
+
 
         <div class="user-avatar">
             {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
         </div>
+
+
         <div class="user-name">{{ auth()->user()->name }}</div>
         <div class="user-email">{{ auth()->user()->email }}</div>
+
 
         <div class="button-group">
             <a href="{{ route('recipes.index') }}" class="btn btn-primary">Browse All Recipes</a>

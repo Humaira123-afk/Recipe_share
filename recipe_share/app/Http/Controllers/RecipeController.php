@@ -16,6 +16,7 @@ class RecipeController extends Controller
     public function welcome() {
         return view('welcome');
     }
+    
 
     public function index(Request $request) {
         $search = $request->input('search');
@@ -26,6 +27,7 @@ class RecipeController extends Controller
 
         return view('index', compact('recipes')); 
     }
+
 
     public function show($id) {
         $recipe = Recipe::with(['user', 'likes', 'comments.user'])->findOrFail($id); 
@@ -190,11 +192,9 @@ public function generate(Request $request)
                          ->with('error', 'You have to type ingredients first!');
     }
 
-    // User ke ingredients ko collect aur clean karna
     $userIngredients = collect(explode(',', strtolower($request->ingredients)))
         ->map(fn($i) => trim($i));
 
-    // JSON file se recipes load karna
     $recipes = json_decode(file_get_contents(storage_path('app/recipes.json')), true);
 
     $results = [];
@@ -203,23 +203,19 @@ public function generate(Request $request)
         $recipeIngredients = collect($recipe['ingredients'])
             ->map(fn($i) => strtolower(trim($i)));
 
-        // Kitne ingredients match ho rahe hain
         $matchedCount = $recipeIngredients->intersect($userIngredients)->count();
 
-        // CONDITION: Sirf wahi recipes dikhao jahan 2 ya usse zyada (>= 2) ingredients match hon
         if ($matchedCount >= 2) {
             $results[] = [
                 'title' => $recipe['title'],
                 'ingredients' => $recipe['ingredients'], 
                 'steps' => $recipe['steps'],
-                // Match percentage calculation
                 'match' => round(($matchedCount / $recipeIngredients->count()) * 100),
-                'matched_count' => $matchedCount // Sorting ke liye use kar sakte hain
+                'matched_count' => $matchedCount
             ];
         }
     }
 
-    // Results ko match percentage ke hisaab se sort karna (Zyada match upar)
     $results = collect($results)->sortByDesc('match')->values()->all();
 
     return view('suggest', compact('results', 'userIngredients'));
@@ -227,3 +223,6 @@ public function generate(Request $request)
 
 
 }
+
+
+

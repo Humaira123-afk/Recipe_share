@@ -24,7 +24,6 @@ class AdminController extends Controller
             'password' => 'required|min:6',
         ]);
 
-        // Naya admin save ho raha hai
         Admin::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -37,19 +36,16 @@ class AdminController extends Controller
     public function login(Request $request) {
         $credentials = $request->only('email', 'password');
 
-        // Email check ho rahi hai
         $admin = Admin::where('email', $request->email)->first();
 
         if (!$admin) {
             return back()->with('error', 'Email database mein nahi mili!');
         }
 
-        // Password check ho raha hai
         if (!Hash::check($request->password, $admin->password)) {
             return back()->with('error', 'Password galat hai!');
         }
 
-        // Admin guard ke zariye login
         if (Auth::guard('admin')->attempt($credentials)) {
             $request->session()->regenerate();
             return redirect()->route('admin.dashboard');

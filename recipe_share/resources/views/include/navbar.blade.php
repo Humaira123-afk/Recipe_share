@@ -2,6 +2,7 @@
     <div class="container mx-auto flex justify-between items-center py-3 px-4">
         <a href="{{ route('dashboard') }}" class="font-bold text-xl">RecipeShare</a>
         <div class="space-x-4">
+            
             @auth
                 <a href="{{ route('recipes.index') }}" class="hover:underline">Browse Recipes</a>
                 <a href="{{ route('recipes.create') }}" class="hover:underline">Share Recipe</a>

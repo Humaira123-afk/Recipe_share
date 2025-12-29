@@ -4,14 +4,13 @@
 @section('content')
 
 <style>
-/* DISABLE PAGE SCROLL */
 body {
     overflow: hidden;
     margin: 0;
     padding: 0;
 }
 
-/* NAVBAR - Clean & Fixed */
+
 .navbar {
     position: fixed;
     top: 0;
@@ -62,7 +61,6 @@ body {
     cursor: pointer;
 }
 
-/* CENTERED PAGE WRAPPER */
 .page-center {
     position: fixed;
     inset: 0;
@@ -73,7 +71,7 @@ body {
     padding-top: 60px;
 }
 
-/* MAIN ADMIN CARD */
+
 .admin-card {
     width: 95%;
     max-width: 900px;
@@ -87,7 +85,7 @@ body {
     max-height: 85vh;
 }
 
-/* STATS GRID */
+
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -118,7 +116,7 @@ body {
     color: #f97316;
 }
 
-/* TABLE AREA - Internal Scroll */
+
 .table-area {
     flex: 1;
     overflow-y: auto;
@@ -150,7 +148,7 @@ body {
     color: #4b5563;
 }
 
-/* ACTION BUTTONS */
+
 .btn-del {
     color: #ef4444;
     text-transform: uppercase;
@@ -169,11 +167,12 @@ body {
     text-decoration: none;
 }
 
-/* SCROLLBAR */
+
 .table-area::-webkit-scrollbar { width: 5px; }
 .table-area::-webkit-scrollbar-track { background: #f1f1f1; }
 .table-area::-webkit-scrollbar-thumb { background: #d1d5db; }
 </style>
+
 
 <nav class="navbar">
     <div class="navbar-container">
@@ -203,7 +202,7 @@ body {
             <div class="stats-grid">
                 <a href="{{ route('admin.recipes') }}" class="stat-box">
                     <h3>Total Recipes</h3>
-                    <p>{{ $recipes_count ?? count($recipes) }}</p>
+                    <p>{{ $f ?? count($recipes) }}</p>
                 </a>
                 <a href="{{ route('admin.users') }}" class="stat-box">
                     <h3>Total Users</h3>

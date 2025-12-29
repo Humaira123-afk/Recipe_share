@@ -3,7 +3,6 @@
 @section('content')
 
 <style>
-/* NAVBAR - Fixed & Sharp */
 .navbar {
     position: fixed;
     top: 0;
@@ -49,7 +48,6 @@
     transition: none !important;
 }
 
-/* PAGE WRAPPER */
 .page-wrapper {
     position: fixed;
     inset: 0;
@@ -60,7 +58,6 @@
     align-items: center;
 }
 
-/* CARD - Sharp */
 .welcome-card {
     width: 100%;
     max-width: 400px;
@@ -72,7 +69,6 @@
     border: 1px solid #e5e7eb;
 }
 
-/* TEXT */
 .welcome-title {
     font-size: 28px;
     font-weight: 800;
@@ -89,21 +85,19 @@
     font-weight: 600;
 }
 
-/* BUTTONS GROUP - TO ENSURE ALIGNMENT */
 .portal-buttons {
     display: flex;
     flex-direction: column;
-    gap: 12px; /* Fixed spacing between buttons */
+    gap: 12px; 
     width: 100%;
 }
 
-/* SHARED BUTTON STYLES */
 .btn-portal {
     display: block;
     width: 100%;
-    box-sizing: border-box; /* This ensures border doesn't change width */
+    box-sizing: border-box; 
     font-weight: bold;
-    padding: 14px 0; /* Consistent height */
+    padding: 14px 0;
     border-radius: 0;
     text-decoration: none;
     text-transform: uppercase;
@@ -114,21 +108,18 @@
     outline: none !important;
 }
 
-/* User Login Button */
 .primary-btn {
     background-color: #f97316 !important;
     color: #ffffff !important;
-    border: 2px solid #f97316 !important; /* Added border to match size */
+    border: 2px solid #f97316 !important; 
 }
 
-/* Admin Portal Button */
 .admin-btn {
     background-color: white !important;
     color: #f97316 !important;
     border: 2px solid #f97316 !important;
 }
 
-/* Keep colors static on hover */
 .btn-portal:hover, .btn-portal:focus {
     opacity: 1;
     box-shadow: none !important;

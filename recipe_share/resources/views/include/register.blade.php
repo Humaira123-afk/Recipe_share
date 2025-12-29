@@ -3,7 +3,6 @@
 @section('content')
 
 <style>
-/* NAVBAR - Fixed & Sharp */
 .navbar {
     position: fixed;
     top: 0;
@@ -29,10 +28,10 @@
     text-decoration: none;
     font-weight: 600;
     padding: 6px 12px;
-    border-radius: 0; /* Sharp edges */
+    border-radius: 0; 
 }
 
-/* PAGE WRAPPER */
+
 .page-wrapper {
     position: fixed;
     inset: 0;
@@ -43,7 +42,7 @@
     padding-top: 64px;
 }
 
-/* REGISTER CARD - Sharp Borders */
+
 .register-card {
     width: 100%;
     max-width: 450px;
@@ -55,17 +54,16 @@
     border: 1px solid #e5e7eb;
 }
 
-/* HEADINGS - Orange & Sharp */
 .register-card h2 {
     font-size: 24px;
     font-weight: 800;
-    color: #f97316; /* Primary Orange */
+    color: #f97316; 
     margin-bottom: 24px;
     text-transform: uppercase;
     letter-spacing: 1.5px;
 }
 
-/* MESSAGES - Sharp */
+
 .msg-box {
     padding: 10px;
     border-radius: 0;
@@ -81,7 +79,7 @@
     border-left-color: #dc2626;
 }
 
-/* FORM ELEMENTS - Sharp & Fixed */
+
 .register-card label {
     display: block;
     margin-bottom: 6px;
@@ -94,7 +92,7 @@
 .register-card input {
     width: 100%;
     border: 1px solid #d1d5db;
-    border-radius: 0; /* Sharp edges */
+    border-radius: 0;
     padding: 10px;
     font-size: 14px;
     margin-bottom: 15px;
@@ -104,13 +102,11 @@
     transition: none;
 }
 
-/* Fixed focus state */
 .register-card input:focus {
     border-color: #f97316 !important;
     box-shadow: none !important;
 }
 
-/* BUTTON - Sharp & Static (No Hover Change) */
 .btn-primary {
     display: block;
     width: 100%;
@@ -118,7 +114,7 @@
     color: white !important;
     font-weight: bold;
     padding: 12px;
-    border-radius: 0; /* Sharp edges */
+    border-radius: 0; 
     border: none;
     cursor: pointer;
     text-transform: uppercase;
@@ -134,7 +130,6 @@
     box-shadow: none !important;
 }
 
-/* FOOTER TEXT */
 .register-footer {
     margin-top: 20px;
     font-size: 13px;
@@ -156,11 +151,13 @@
     <div class="navbar-container">
         <a href="{{ route('welcome') }}">RecipeShare</a>
         <div>
+
             <a href="{{ route('login') }}">Login</a>
             <a href="{{ route('register') }}">Register</a>
         </div>
     </div>
 </nav>
+
 
 <div class="page-wrapper">
     <div class="register-card">

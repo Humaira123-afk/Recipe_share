@@ -3,7 +3,6 @@
 @section('content')
 
 <style>
-/* NAVBAR - Fixed & Sharp */
 .navbar {
     position: fixed;
     top: 0;
@@ -29,10 +28,9 @@
     text-decoration: none;
     font-weight: 600;
     padding: 6px 12px;
-    border-radius: 0; /* Sharp edges */
+    border-radius: 0; 
 }
 
-/* PAGE WRAPPER */
 .page-wrapper {
     position: fixed;
     inset: 0;
@@ -43,29 +41,26 @@
     padding-top: 64px;
 }
 
-/* LOGIN CARD - Sharp Borders */
 .login-card {
     width: 100%;
     max-width: 400px;
     background-color: white;
-    border-radius: 0; /* Sharp edges */
+    border-radius: 0; 
     box-shadow: 0 10px 20px rgba(0,0,0,0.1);
     padding: 32px 24px;
     text-align: center;
     border: 1px solid #e5e7eb;
 }
 
-/* HEADINGS - CHANGED TO ORANGE */
 .login-card h2 {
     font-size: 26px;
     font-weight: 800;
-    color: #f97316; /* Primary Orange */
+    color: #f97316; 
     margin-bottom: 24px;
     text-transform: uppercase;
     letter-spacing: 1.5px;
 }
 
-/* MESSAGES - Sharp */
 .msg-box {
     padding: 10px;
     border-radius: 0;
@@ -87,7 +82,6 @@
     border-left-color: #16a34a;
 }
 
-/* FORM ELEMENTS - Sharp & Fixed */
 .login-card label {
     display: block;
     margin-bottom: 6px;
@@ -116,7 +110,6 @@
     box-shadow: none !important;
 }
 
-/* BUTTON - Sharp & Static */
 .btn-primary {
     display: block;
     width: 100%;
@@ -140,7 +133,6 @@
     box-shadow: none !important;
 }
 
-/* FOOTER TEXT */
 .login-footer {
     margin-top: 20px;
     font-size: 13px;

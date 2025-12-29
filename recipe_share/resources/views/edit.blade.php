@@ -185,6 +185,7 @@ body {
         @endif
 
         <form action="{{ route('recipes.update', $recipe->id) }}" method="POST" enctype="multipart/form-data">
+
             @csrf
             @method('PUT')
 
@@ -202,9 +203,11 @@ body {
 
             <label>Current Image</label>
             <div style="display: flex; align-items: flex-end; gap: 10px;">
+
                 @if($recipe->image)
                     <img src="{{ asset('storage/'.$recipe->image) }}">
                 @endif
+                
                 <input type="file" name="image" style="font-size: 11px; margin-bottom: 12px;">
             </div>
 

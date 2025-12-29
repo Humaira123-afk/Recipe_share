@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
     <style>
-        /* BODY - Clean & Gray Background */
         body {
             background-color: #f3f4f6;
             min-height: 100vh;
@@ -18,14 +17,13 @@
         }
 
         main {
-            margin-top: 80px; /* Adjusted for fixed navbar */
+            margin-top: 80px; 
             max-width: 1280px;
             margin-left: auto;
             margin-right: auto;
             padding: 0 16px;
         }
 
-        /* NAVBAR - Fixed & Sharp */
         .navbar {
             position: fixed;
             top: 0;
@@ -57,20 +55,18 @@
 
         .nav-actions .nav-link {
             padding: 8px 15px;
-            border-radius: 0; /* Sharp edges */
+            border-radius: 0; 
             color: #ffffff;
             text-decoration: none;
             font-weight: 600;
-            transition: none !important; /* No hover animation */
+            transition: none !important; 
         }
 
-        /* Fixed Nav Links (No Hover Color Change) */
         .nav-actions .nav-link:hover {
-            background-color: rgba(255, 255, 255, 0.1); /* Very subtle overlay, no color change */
+            background-color: rgba(255, 255, 255, 0.1);
             color: #ffffff;
         }
 
-        /* GLOBAL BUTTONS - Sharp & Fixed */
         .btn {
             display: inline-block;
             background-color: #f97316 !important;
@@ -87,20 +83,17 @@
             outline: none !important;
         }
 
-        /* Forcing buttons to stay static */
         .btn:hover, .btn:active, .btn:focus {
             background-color: #f97316 !important;
             box-shadow: none !important;
         }
 
-        /* Global Container for content alignment */
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
         }
 
-        /* Sharp utility for any card or box */
         .sharp-card {
             background: white;
             border-radius: 0;
@@ -111,7 +104,7 @@
 </head>
 <body>
 
-    @include('include.navbar') {{-- Common navbar --}}
+    @include('include.navbar') 
 
     <main>
         @yield('content')

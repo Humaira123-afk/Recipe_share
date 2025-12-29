@@ -4,14 +4,13 @@
 @section('content')
 
 <style>
-/* DISABLE PAGE SCROLL */
+
 body {
     overflow: hidden;
     margin: 0;
     padding: 0;
 }
 
-/* NAVBAR - Clean & Fixed */
 .navbar {
     position: fixed;
     top: 0;
@@ -62,7 +61,6 @@ body {
     cursor: pointer;
 }
 
-/* CENTERED PAGE WRAPPER */
 .page-center {
     position: fixed;
     inset: 0;
@@ -73,7 +71,6 @@ body {
     padding-top: 60px;
 }
 
-/* CARD - Sharp */
 .saved-card {
     width: 90%;
     max-width: 800px;
@@ -96,14 +93,12 @@ body {
     text-transform: uppercase;
 }
 
-/* SAVED LIST AREA - Scrollable inside card */
 .saved-list-area {
     flex: 1;
     overflow-y: auto;
     padding-right: 5px;
 }
 
-/* ITEM ROW */
 .recipe-item {
     display: flex;
     align-items: center;
@@ -138,7 +133,6 @@ body {
     color: #6b7280;
 }
 
-/* BUTTONS - Sharp */
 .btn-group {
     display: flex;
     gap: 10px;
@@ -166,7 +160,6 @@ body {
     border-color: #d1d5db;
 }
 
-/* FOOTER BUTTON */
 .back-btn {
     text-align: center;
     border: 1px solid #f97316;
